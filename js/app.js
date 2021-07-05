@@ -34,15 +34,13 @@ function renderimages() {
   rightElRandomNum=gettingRandomNum();
 
 
-  while (leftElRandomNum === rightElRandomNum) {
+  while (leftElRandomNum === rightElRandomNum || leftElRandomNum === middleElRandomNum || rightElRandomNum === middleElRandomNum){
     leftElRandomNum = gettingRandomNum();
-    while (leftElRandomNum === middleElRandomNum) {
-      leftElRandomNum = gettingRandomNum();
-      while (rightElRandomNum === middleElRandomNum) {
-        rightElRandomNum = gettingRandomNum();
-      }
-    }
+    middleElRandomNum=gettingRandomNum();
+    rightElRandomNum=gettingRandomNum();
+
   }
+
   leftImgEl.setAttribute('src', proudcts[leftElRandomNum].img);
   middleImgEl.setAttribute('src', proudcts[middleElRandomNum].img);
   rightImgEl.setAttribute('src', proudcts[rightElRandomNum].img);
@@ -52,10 +50,6 @@ function renderimages() {
   proudcts[leftElRandomNum].views++;
   proudcts[rightElRandomNum].views++;
   proudcts[middleElRandomNum].views++;
-
-
-
-
 
 
 }
@@ -78,14 +72,19 @@ function dealWithClicks(event) {
     }
     renderimages();
   } else {
-    let ulEl = document.getElementById('results');
-    for (let i = 0; i < proudcts.length; i++) {
-      let liEl = document.createElement('li');
-      liEl.textContent = `${proudcts[i].productName} had ${proudcts[i].votes} votes, was seen ${proudcts[i].views} times .`;
-      ulEl.appendChild(liEl);
+    let btnEl=document.createElement('button');
+    btnEl.innerHTML='show results';
+    ulEl.appendChild(btnEl);
+    btnEl.addEventListener('click',function(){
+      let ulEl = document.getElementById('results');
+      for (let i = 0; i < proudcts.length; i++) {
+        let liEl = document.createElement('li');
+        liEl.textContent = `${proudcts[i].productName} had ${proudcts[i].votes} votes, was seen ${proudcts[i].views} times .`;
+        ulEl.appendChild(liEl);
+      }
 
+    });
 
-    }
 
 
 
