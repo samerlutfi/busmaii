@@ -1,6 +1,6 @@
 'use strict';
-let attemptsEl = document.getElementById('attempts');
-let containarEl = document.getElementById('container');
+// let attemptsEl = document.getElementById('attempts');
+// let containarEl = document.getElementById('container');
 let leftImgEl = document.getElementById('left');
 let middleImgEl = document.getElementById('middle');
 let rightImgEl = document.getElementById('right');
@@ -8,15 +8,20 @@ let ulEl = document.getElementById('results');
 let attempts = 1;
 let maxattempts = 25;
 let proudcts = [];
+let productsN = [];
+let votes = [];
+let views = [];
 function ProudctsImages(productName) {
   this.productName = productName.split('.')[0];
   this.img = 'images/' + productName;
   this.votes = 0;
-  this.views =0;
+  this.views = 0;
 
   proudcts.push(this);
+  productsN.push(this.productName);
 
 }
+
 let allProudctsImgs = ['bag.jpg', 'banana.jpg', 'bathroom.jpg', 'boots.jpg', 'breakfast.jpg', 'bubblegum.jpg', 'chair.jpg', 'cthulhu.jpg', 'dog-duck.jpg', 'dragon.jpg', 'pen.jpg', 'pet-sweep.jpg', 'scissors.jpg', 'shark.jpg', 'sweep.png', 'tauntaun.jpg', 'unicorn.jpg', 'water-can.jpg', 'wine-glass.jpg'];
 for (let i = 0; i < allProudctsImgs.length; i++) {
   new ProudctsImages(allProudctsImgs[i]);
@@ -29,15 +34,15 @@ let middleElRandomNum;
 let rightElRandomNum;
 
 function renderimages() {
-  leftElRandomNum=gettingRandomNum();
-  middleElRandomNum=gettingRandomNum();
-  rightElRandomNum=gettingRandomNum();
+  leftElRandomNum = gettingRandomNum();
+  middleElRandomNum = gettingRandomNum();
+  rightElRandomNum = gettingRandomNum();
 
 
-  while (leftElRandomNum === rightElRandomNum || leftElRandomNum === middleElRandomNum || rightElRandomNum === middleElRandomNum){
+  while (leftElRandomNum === rightElRandomNum || leftElRandomNum === middleElRandomNum || rightElRandomNum === middleElRandomNum) {
     leftElRandomNum = gettingRandomNum();
-    middleElRandomNum=gettingRandomNum();
-    rightElRandomNum=gettingRandomNum();
+    middleElRandomNum = gettingRandomNum();
+    rightElRandomNum = gettingRandomNum();
 
   }
 
@@ -72,25 +77,70 @@ function dealWithClicks(event) {
     }
     renderimages();
   } else {
-    let btnEl=document.createElement('button');
-    btnEl.innerHTML='show results';
+    let btnEl = document.createElement('button');
+    btnEl.innerHTML = 'show results';
     ulEl.appendChild(btnEl);
-    btnEl.addEventListener('click',function(){
-      let ulEl = document.getElementById('results');
+    btnEl.addEventListener('click', function () {
+      // let ulEl = document.getElementById('results');
       for (let i = 0; i < proudcts.length; i++) {
-        let liEl = document.createElement('li');
-        liEl.textContent = `${proudcts[i].productName} had ${proudcts[i].votes} votes, was seen ${proudcts[i].views} times .`;
-        ulEl.appendChild(liEl);
+        // let liEl = document.createElement('li');
+        // liEl.textContent = `${proudcts[i].productName} had ${proudcts[i].votes} votes, was seen ${proudcts[i].views} times .`;
+        // ulEl.appendChild(liEl);
+        votes.push(proudcts[i].votes);
+        // eslint-disable-next-line indent
+        views.push(proudcts[i].views);
       }
+      renderchart();
 
     });
-
-
-
 
     leftImgEl.removeEventListener('click', dealWithClicks);
     middleImgEl.removeEventListener('click', dealWithClicks);
     rightImgEl.removeEventListener('click', dealWithClicks);
+
   }
   attempts++;
+}
+
+function renderchart() {
+  let ctx = document.getElementById('myChart').getContext('2d');
+  let myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: productsN,
+      datasets: [{
+        label: '# of Votes',
+        data: votes,
+        backgroundColor: [
+          'rgba(0, 145, 23, 0.7)',
+        ],
+        borderColor: [
+          'rgba(255, 99, 132, 1)',
+        ],
+        borderWidth: 1
+      },
+      {
+        label: '# of views',
+        data: views,
+        backgroundColor: [
+          'rgba(255, 145, 23, 0.7)',
+        ],
+        borderColor: [
+          'rgba(100, 99, 132, 1)',
+        ],
+        borderWidth: 1
+
+      }]
+    },
+    options: {
+      responsive:true,
+      maintainAspectRatio: false,
+
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
 }
