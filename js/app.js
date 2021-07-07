@@ -29,22 +29,37 @@ for (let i = 0; i < allProudctsImgs.length; i++) {
 function gettingRandomNum() {
   return Math.floor(Math.random() * proudcts.length);
 }
+
+// let nums=[];
+// for(let i = 0;i<allProudctsImgs.length;i++){
+//   nums.push(i);
+// }
+
+// function shuffle(o) {
+//   for (let j, x, i = o.length; i; j = parseInt(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
+//   return o;
+// }
+// let shuffled = shuffle(nums);
+
 let leftElRandomNum;
 let middleElRandomNum;
 let rightElRandomNum;
 
+
 function renderimages() {
-  leftElRandomNum = gettingRandomNum();
-  middleElRandomNum = gettingRandomNum();
+  leftElRandomNum =gettingRandomNum();
+  middleElRandomNum =gettingRandomNum();
   rightElRandomNum = gettingRandomNum();
-
-
-  while (leftElRandomNum === rightElRandomNum || leftElRandomNum === middleElRandomNum || rightElRandomNum === middleElRandomNum) {
-    leftElRandomNum = gettingRandomNum();
-    middleElRandomNum = gettingRandomNum();
-    rightElRandomNum = gettingRandomNum();
-
+  if(
+    leftElRandomNum=== middleElRandomNum ||leftElRandomNum===rightElRandomNum||
+    middleElRandomNum===rightElRandomNum
+  ){
+    renderimages();
+    return;
   }
+
+
+
 
   leftImgEl.setAttribute('src', proudcts[leftElRandomNum].img);
   middleImgEl.setAttribute('src', proudcts[middleElRandomNum].img);
@@ -75,6 +90,7 @@ function dealWithClicks(event) {
     } else if (clickedOne === 'middle') {
       proudcts[middleElRandomNum].votes++;
     }
+
     renderimages();
   } else {
     let btnEl = document.createElement('button');
