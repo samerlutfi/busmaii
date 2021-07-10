@@ -11,6 +11,9 @@ let proudcts = [];
 let productsN = [];
 let votes = [];
 let views = [];
+// readViewsFromLocal();
+// readvotesFromLocal();
+
 function ProudctsImages(productName) {
   this.productName = productName.split('.')[0];
   this.img = 'images/' + productName;
@@ -21,6 +24,32 @@ function ProudctsImages(productName) {
   productsN.push(this.productName);
 
 }
+function saveVotesToLocalStorage(){
+  let data=JSON.stringify(votes);
+  localStorage.setItem('votes',data);
+}
+function saveViewsToLocalStorage(){
+  let data1=JSON.stringify(views);
+  localStorage.setItem('views',data1);
+}
+function readViewsFromLocal() {
+  let stringObj=localStorage.getItem('views');
+  let normalObj=JSON.parse(stringObj);
+  if(normalObj!==null){
+    views=normalObj;
+    // renderchart();
+  }
+}
+
+function readvotesFromLocal() {
+  let stringObj1=localStorage.getItem('votes');
+  let normalObj1=JSON.parse(stringObj1);
+  if(normalObj1!==null){
+    views=normalObj1;
+    // renderchart();
+  }
+}
+
 
 let allProudctsImgs = ['bag.jpg', 'banana.jpg', 'bathroom.jpg', 'boots.jpg', 'breakfast.jpg', 'bubblegum.jpg', 'chair.jpg', 'cthulhu.jpg', 'dog-duck.jpg', 'dragon.jpg', 'pen.jpg', 'pet-sweep.jpg', 'scissors.jpg', 'shark.jpg', 'sweep.png', 'tauntaun.jpg', 'unicorn.jpg', 'water-can.jpg', 'wine-glass.jpg'];
 for (let i = 0; i < allProudctsImgs.length; i++) {
@@ -71,8 +100,8 @@ function renderimages() {
   proudcts[rightElRandomNum].views++;
   proudcts[middleElRandomNum].views++;
 
-
 }
+
 renderimages();
 
 leftImgEl.addEventListener('click', dealWithClicks);
@@ -89,6 +118,7 @@ function dealWithClicks(event) {
       proudcts[rightElRandomNum].votes++;
     } else if (clickedOne === 'middle') {
       proudcts[middleElRandomNum].votes++;
+
     }
 
     renderimages();
@@ -117,6 +147,7 @@ function dealWithClicks(event) {
   }
   attempts++;
 }
+
 
 function renderchart() {
   let ctx = document.getElementById('myChart').getContext('2d');
@@ -159,4 +190,6 @@ function renderchart() {
       }
     }
   });
+  saveVotesToLocalStorage();
+  saveViewsToLocalStorage();
 }
